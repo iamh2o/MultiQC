@@ -27,11 +27,11 @@ class MultiqcModule(BaseMultiqcModule):
         self.dat_json = dict()
         for f in self.find_log_files('alignstats', filehandles=False):
             self.parse_alignstats_data(f)
+            self.alignstats_general_stats_table(f['s_name'])
             print('xxxx', f)
 
         # Write parsed report data to a file
         self.write_data_file(self.dat_json, 'multiqc_alignstats')
-        self.alignstats_general_stats_table(f['s_name'])
         self.add_report_section()
         
 
