@@ -25,23 +25,27 @@ class MultiqcModule(BaseMultiqcModule):
         super(MultiqcModule, self).__init__(name='alignstats', anchor='alignstats',href="https://github.com/jfarek/alignstats",info="Alignstats generates a ton of NGS stats for target capture and WGS data")
 
         self.dat_json = dict()
-        z = self.find_log_files('alignstats', filehandles=False)
-        for f in z:
-            pass
-        temp_dat = ""
-        for i in open("{0}/{1}".format(f['root'],f['fn'])):
-            temp_dat = "{0}{1}".format(temp_dat, i.rstrip())
-        temp_ds = json.loads(temp_dat)
-        #from IPython import embed; embed();
-        self.dat_json[f['s_name']] =  {}
-        for k in temp_ds:
-            self.dat_json[f['s_name']][k] = temp_ds[k]
-            
+        for f in self.find_log_files('alignstats', filehandles=False):
+            self.parse_alignstats_data(f)
+            print('xxxx', f)
+
         # Write parsed report data to a file
         self.write_data_file(self.dat_json, 'multiqc_alignstats')
         self.alignstats_general_stats_table(f['s_name'])
         self.add_report_section()
         
+
+    def parse_alignstats_data(self,f):
+
+        self.dat_json[f['s_name']] =  {}
+
+        fdat = ""
+        file_loc = "{0}/{1}".format(f['root'], f['fn'])
+        for i in open(file_loc):
+            fdat = "{0}{1}".format(fdat, i.rstrip())
+        temp_ds = json.loads(fdat)
+        for k in temp_ds:
+            self.dat_json[f['s_name']][k] = temp_ds[k]
         
     def alignstats_general_stats_table(self, samp_name):
 
