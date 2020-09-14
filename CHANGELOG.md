@@ -8,6 +8,8 @@
 
 * [**HOPS**](https://www.github.com/rhubler/HOPS)
   * Post-alignment ancient DNA analysis tool for MALT
+* [**alignstats**](https://github.com/jfarek/alignstats)
+  * NGS TgtCap and WGS stats used by BCM genome center
 
 #### Module updates
 

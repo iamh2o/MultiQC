@@ -85,6 +85,7 @@ setup(
         'multiqc.modules.v1': [
             'adapterRemoval = multiqc.modules.adapterRemoval:MultiqcModule',
             'afterqc = multiqc.modules.afterqc:MultiqcModule',
+            'alignstats = multiqc.modules.alignstats:MultiqcModule',
             'bamtools = multiqc.modules.bamtools:MultiqcModule',
             'bbmap = multiqc.modules.bbmap:MultiqcModule',
             'bcftools = multiqc.modules.bcftools:MultiqcModule',

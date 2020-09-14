@@ -9,6 +9,8 @@ adapterRemoval:
 afterqc:
     fn: '*.json'
     contents: 'allow_mismatch_in_poly'
+alignstats:
+    fn_re: '.*.alignstats.json'
 bamtools/stats:
     contents: 'Stats for BAM file(s):'
     shared: true
