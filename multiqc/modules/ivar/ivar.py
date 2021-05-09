@@ -4,6 +4,7 @@
 """ MultiQC module to parse output files from iVar """
 
 from __future__ import print_function
+import os
 from collections import OrderedDict
 import logging
 import re
@@ -134,8 +135,19 @@ class MultiqcModule(BaseMultiqcModule):
         self.general_stats_addcols(self.ivar_data, headers)
 
     def primer_heatmap(self):
-        """Heatmap showing information on each primer found for every sample"""
+        """ Heatmap showing information on each primer found for every sample """
         # Top level dict contains sample IDs + OrderedDict(primer, counts)
+        max_cell = None
+        mval = ""
+        if os.path.exists('./covidseq.mqc'):
+            try:
+                print('detected covidseq.mqc file, reading....')
+                max_cell = int(os.popen('grep ivar_cell_max ./covidseq.mqc | cut -d " " -f 2').readline().rstrip())
+
+            except Exception as e:
+                print('failed to read covidseq.mqc file, setting ivar cell_max to 500')
+                max_cell = 200
+            mval = f" -max amp count == {max_cell}-"
 
         final_data = list()
         final_xcats = list()
@@ -152,7 +164,7 @@ class MultiqcModule(BaseMultiqcModule):
         if self.ivar_primers is not None:
             pconfig = {
                 "id": "ivar-primer-count-heatmap",
-                "title": "iVar: Number of primers found for each sample",
+                "title": f"iVar: Number of primers found for each sample per amp. {mval}",
                 "decimalPlaces": 0,
                 "square": False,
                 "xcats_samples": False,
@@ -163,5 +175,5 @@ class MultiqcModule(BaseMultiqcModule):
                 anchor="ivar-primers-heatmap",
                 description="Counts observed for each primer per sample.",
                 helptext="This lists the number of times a specific primer was found in the respective sample.",
-                plot=heatmap.plot(final_data, final_xcats, final_ycats, pconfig),
+                plot=heatmap.plot(final_data, final_xcats, final_ycats, pconfig, max_cell),
             )

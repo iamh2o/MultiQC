@@ -140,7 +140,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def parse_fastp_log(self, f):
-        """Parse the JSON output from fastp and save the summary statistics"""
+        """ Parse the JSON output from fastp and save the summary statistics """
         try:
             parsed_json = json.load(f["f"])
         except:
@@ -148,11 +148,11 @@ class MultiqcModule(BaseMultiqcModule):
             return None
 
         # Fetch a sample name from the command
-        s_name = f["s_name"]
+        s_name = f["fn"].split('.')[0]
         cmd = parsed_json["command"].split()
         for i, v in enumerate(cmd):
             if v == "-i":
-                s_name = self.clean_s_name(cmd[i + 1], f["root"])
+                s_name = s_name #self.clean_s_name(cmd[i + 1], f["root"])
         if s_name == "fastp":
             log.warning("Could not parse sample name from fastp command: {}".format(f["fn"]))
 
@@ -343,7 +343,7 @@ class MultiqcModule(BaseMultiqcModule):
         self.general_stats_addcols(self.fastp_data, headers)
 
     def fastp_filtered_reads_chart(self):
-        """Function to generate the fastp filtered reads bar plot"""
+        """ Function to generate the fastp filtered reads bar plot """
         # Specify the order of the different possible categories
         keys = OrderedDict()
         keys["filtering_result_passed_filter_reads"] = {"name": "Passed Filter"}
@@ -362,22 +362,24 @@ class MultiqcModule(BaseMultiqcModule):
         return bargraph.plot(self.fastp_data, keys, pconfig)
 
     def fastp_read_qual_plot(self):
-        """Make the read quality plot for Fastp"""
-        data_labels, pdata = self.filter_pconfig_pdata_subplots(self.fastp_qual_plotdata, "Sequence Quality")
+        """ Make the read quality plot for Fastp """
+        data_labels, pdata = self.filter_pconfig_pdata_subplots(self.fastp_qual_plotdata, "Sequence Quality, xmax @ 600")
         pconfig = {
             "id": "fastp-seq-quality-plot",
             "title": "Fastp: Sequence Quality",
             "xlab": "Read Position",
             "ylab": "R1 Before filtering: Sequence Quality",
             "ymin": 0,
+            "xmin":0,
+            "xmax":600,
             "xDecimals": False,
             "data_labels": data_labels,
         }
         return linegraph.plot(pdata, pconfig)
 
     def fastp_read_gc_plot(self):
-        """Make the read GC plot for Fastp"""
-        data_labels, pdata = self.filter_pconfig_pdata_subplots(self.fastp_gc_content_data, "Base Content Percent")
+        """ Make the read GC plot for Fastp """
+        data_labels, pdata = self.filter_pconfig_pdata_subplots(self.fastp_gc_content_data, "Base Content Percent, xmax 600")
         pconfig = {
             "id": "fastp-seq-content-gc-plot",
             "title": "Fastp: Read GC Content",
@@ -385,6 +387,8 @@ class MultiqcModule(BaseMultiqcModule):
             "ylab": "R1 Before filtering: Base Content Percent",
             "ymax": 100,
             "ymin": 0,
+            "xmin": 0,
+            "xmax":600,
             "xDecimals": False,
             "yLabelFormat": "{value}%",
             "tt_label": "{point.x}: {point.y:.2f}%",
@@ -393,7 +397,7 @@ class MultiqcModule(BaseMultiqcModule):
         return linegraph.plot(pdata, pconfig)
 
     def fastp_read_n_plot(self):
-        """Make the read N content plot for Fastp"""
+        """ Make the read N content plot for Fastp """
         data_labels, pdata = self.filter_pconfig_pdata_subplots(self.fastp_n_content_data, "Base Content Percent")
         pconfig = {
             "id": "fastp-seq-content-n-plot",

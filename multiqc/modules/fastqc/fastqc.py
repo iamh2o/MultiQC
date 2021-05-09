@@ -46,13 +46,14 @@ class MultiqcModule(BaseMultiqcModule):
         # Find and parse unzipped FastQC reports
         for f in self.find_log_files("fastqc/data"):
             s_name = self.clean_s_name(os.path.basename(f["root"]), os.path.dirname(f["root"]))
+            s_name = f['fn'].split('.')[0]
             self.parse_fastqc_report(f["f"], s_name, f)
 
         # Find and parse zipped FastQC reports
         for f in self.find_log_files("fastqc/zip", filecontents=False):
-            s_name = f["fn"]
+            s_name = f["fn"].split('.')[0]
             if s_name.endswith("_fastqc.zip"):
-                s_name = s_name[:-11]
+                s_name = s_name #s_name[:-11]
             # Skip if we already have this report - parsing zip files is slow..
             if s_name in self.fastqc_data.keys():
                 log.debug("Skipping '{}' as already parsed '{}'".format(f["fn"], s_name))
@@ -138,7 +139,7 @@ class MultiqcModule(BaseMultiqcModule):
         # Make the sample name from the input filename if we find it
         fn_search = re.search(r"Filename\s+(.+)", file_contents)
         if fn_search:
-            s_name = self.clean_s_name(fn_search.group(1), f["root"])
+            s_name = f['fn'].split('.')[0] #xself.clean_s_name(fn_search.group(1), f["root"])
 
         if s_name in self.fastqc_data.keys():
             log.debug("Duplicate sample name found! Overwriting: {}".format(s_name))
@@ -301,7 +302,7 @@ class MultiqcModule(BaseMultiqcModule):
         self.general_stats_addcols(data, headers)
 
     def read_count_plot(self):
-        """Stacked bar plot showing counts of reads"""
+        """ Stacked bar plot showing counts of reads """
         pconfig = {
             "id": "fastqc_sequence_counts_plot",
             "title": "FastQC: Sequence Counts",
@@ -359,7 +360,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def sequence_quality_plot(self):
-        """Create the HTML for the phred quality score plot"""
+        """ Create the HTML for the phred quality score plot """
 
         data = dict()
         for s_name in self.fastqc_data:
@@ -409,7 +410,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def per_seq_quality_plot(self):
-        """Create the HTML for the per sequence quality score plot"""
+        """ Create the HTML for the per sequence quality score plot """
 
         data = dict()
         for s_name in self.fastqc_data:
@@ -455,7 +456,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def sequence_content_plot(self):
-        """Create the epic HTML for the FastQC sequence content heatmap"""
+        """ Create the epic HTML for the FastQC sequence content heatmap """
 
         # Prep the data
         data = OrderedDict()
@@ -551,7 +552,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def gc_content_plot(self):
-        """Create the HTML for the FastQC GC content plot"""
+        """ Create the HTML for the FastQC GC content plot """
 
         data = dict()
         data_norm = dict()
@@ -669,7 +670,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def n_content_plot(self):
-        """Create the HTML for the per base N content plot"""
+        """ Create the HTML for the per base N content plot """
 
         data = dict()
         for s_name in self.fastqc_data:
@@ -723,7 +724,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def seq_length_dist_plot(self):
-        """Create the HTML for the Sequence Length Distribution plot"""
+        """ Create the HTML for the Sequence Length Distribution plot """
 
         data = dict()
         seq_lengths = set()
@@ -774,7 +775,7 @@ class MultiqcModule(BaseMultiqcModule):
             )
 
     def seq_dup_levels_plot(self):
-        """Create the HTML for the Sequence Duplication Levels plot"""
+        """ Create the HTML for the Sequence Duplication Levels plot """
 
         data = dict()
         max_dupval = 0
@@ -921,7 +922,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def adapter_content_plot(self):
-        """Create the HTML for the FastQC adapter plot"""
+        """ Create the HTML for the FastQC adapter plot """
 
         data = dict()
         for s_name in self.fastqc_data:
@@ -998,7 +999,7 @@ class MultiqcModule(BaseMultiqcModule):
         )
 
     def status_heatmap(self):
-        """Heatmap showing all statuses for every sample"""
+        """ Heatmap showing all statuses for every sample """
         status_numbers = {"pass": 1, "warn": 0.5, "fail": 0.25}
         data = []
         s_names = []

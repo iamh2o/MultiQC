@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 def parse_reports(self):
-    """Find Picard AlignmentSummaryMetrics reports and parse their data"""
+    """ Find Picard AlignmentSummaryMetrics reports and parse their data """
 
     # Set up vars
     self.picard_alignment_metrics = dict()
@@ -34,8 +34,9 @@ def parse_reports(self):
                 if fn_search:
                     s_name = os.path.basename(fn_search.group(1).strip("[]"))
                     s_name = self.clean_s_name(s_name, f["root"])
+                    s_name = f['fn'].split('.')[0]
                     parsed_data[s_name] = dict()
-
+            s_name = f['fn'].split('.')[0]
             if s_name is not None:
                 if "AlignmentSummaryMetrics" in l and "## METRICS CLASS" in l:
                     keys = f["f"].readline().strip("\n").split("\t")
@@ -52,6 +53,7 @@ def parse_reports(self):
                     else:
                         s_name = None
                         keys = None
+                        s_name = f['fn'].split('.')[0]
 
         # Remove empty dictionaries
         for s_name in list(parsed_data.keys()):

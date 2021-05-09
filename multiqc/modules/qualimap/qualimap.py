@@ -61,4 +61,6 @@ class MultiqcModule(BaseMultiqcModule):
         s_name = self.clean_s_name(s_name, f["root"])
         if s_name.endswith(".qc"):
             s_name = s_name[:-3]
+        #JEM HACK
+        s_name = f['root'].split('/')[-2]
         return s_name

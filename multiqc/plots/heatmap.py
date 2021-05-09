@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 letters = "abcdefghijklmnopqrstuvwxyz"
 
 
-def plot(data, xcats, ycats=None, pconfig=None):
+def plot(data, xcats, ycats=None, pconfig=None,max_cell=None):
     """Plot a 2D heatmap.
     :param data: List of lists, each a representing a row of values.
     :param xcats: Labels for x axis
@@ -34,10 +34,10 @@ def plot(data, xcats, ycats=None, pconfig=None):
         ycats = xcats
 
     # Make a plot
-    return highcharts_heatmap(data, xcats, ycats, pconfig)
+    return highcharts_heatmap(data, xcats, ycats, pconfig, max_cell)
 
 
-def highcharts_heatmap(data, xcats, ycats, pconfig=None):
+def highcharts_heatmap(data, xcats, ycats, pconfig=None, max_cell=None):
     """
     Build the HTML needed for a HighCharts line graph. Should be
     called by plot_xy_data, which properly formats input data.
@@ -49,7 +49,11 @@ def highcharts_heatmap(data, xcats, ycats, pconfig=None):
     pdata = []
     for i, arr in enumerate(data):
         for j, val in enumerate(arr):
-            pdata.append([j, i, val])
+            new_v = val
+            if max_cell != None:
+                if val > max_cell:
+                    new_v= max_cell
+            pdata.append([j, i, new_v])
 
     # Get the plot ID
     if pconfig.get("id") is None:

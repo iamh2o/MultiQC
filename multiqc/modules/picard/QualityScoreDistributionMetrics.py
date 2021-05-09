@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 
 def parse_reports(self):
-    """Find Picard QualityScoreDistribution reports and parse their data"""
+    """ Find Picard QualityScoreDistribution reports and parse their data """
 
     headers = ["QUALITY", "COUNT_OF_Q"]
     formats = [int, int]
@@ -40,7 +40,10 @@ def parse_reports(self):
 
     lg = {}
     for s_name in all_data:
-        lg[s_name] = OrderedDict((qual, data["COUNT_OF_Q"]) for qual, data in all_data[s_name].items())
+        ss_name = s_name
+        if len(s_name.split(' | ')) >0:
+               ss_name = s_name.split(' | ')[-1]
+        lg[ss_name] = OrderedDict((qual, data["COUNT_OF_Q"]) for qual, data in all_data[s_name].items())
 
     self.add_section(
         name="Base Quality Distribution",

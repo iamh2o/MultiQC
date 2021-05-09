@@ -59,7 +59,7 @@ def read_base_distrib_data(line_iter):
 
 
 def parse_reports(self):
-    """Find Picard BaseDistributionByCycleMetrics reports and parse their data"""
+    """ Find Picard BaseDistributionByCycleMetrics reports and parse their data """
 
     # Set up vars
     self.picard_baseDistributionByCycle_data = dict()
@@ -76,6 +76,7 @@ def parse_reports(self):
             # sample name
             clean_fn = lambda n: self.clean_s_name(n, f["root"])
             s_name = read_sample_name(lines, clean_fn, "BaseDistributionByCycle")
+            s_name = f['fn'].split('.')[0]
             assert s_name is not None
 
             # pull out the data
@@ -87,8 +88,9 @@ def parse_reports(self):
             assert not (set(data) - set([1, 2]))
 
             # set up the set of s_names
+            s_name = f['fn'].split('.')[0]
             if 2 in set(data):
-                s_names = {1: "%s_R1" % s_name, 2: "%s_R2" % s_name}
+                s_names = {1: "%s.R1" % s_name, 2: "%s.R2" % s_name}
             else:
                 s_names = {1: s_name}
 
@@ -123,7 +125,7 @@ def parse_reports(self):
                 samplestats["cycle_count"] += len(data_by_cycle.keys())
         except AssertionError:
             pass
-
+        s_name = f['fn'].split('.')[0]
     # Calculate summed mean values for all read orientations
     for s_name, v in self.picard_baseDistributionByCycle_samplestats.items():
         v["mean_pct_a"] = v["sum_pct_a"] / v["cycle_count"]
@@ -142,11 +144,13 @@ def parse_reports(self):
         # Plot the data and add section
         pconfig = {
             "id": "picard_base_distribution_by_cycle",
-            "title": "Picard: Base Distribution",
+            "title": "Picard: Base Distribution, xmax @ 600bp",
             "ylab": "%",
             "xlab": "Cycle #",
             "xDecimals": False,
             "tt_label": "<b>cycle {point.x}</b>: {point.y:.2f} %",
+            "xmax": 600,
+            "xmin": 0,
             "ymax": 100,
             "ymin": 0,
             "data_labels": [

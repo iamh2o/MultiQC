@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 def parse_reports(self):
-    """Find Picard QualityByCycleMetrics reports and parse their data"""
+    """ Find Picard QualityByCycleMetrics reports and parse their data """
 
     headers = ["CYCLE", "MEAN_QUALITY"]
     formats = [int, float]
@@ -29,9 +29,11 @@ def parse_reports(self):
     # Plot the data and add section
     pconfig = {
         "id": "picard_quality_by_cycle",
-        "title": "Picard: Mean Base Quality by Cycle",
+        "title": "Picard: Mean Base Quality by Cycle, xmax 600",
         "ylab": "Mean Base Quality",
         "xlab": "Cycle Number",
+        "xmin": 0,
+        "xmax" : 600,
         "xDecimals": False,
         "tt_label": "<b>cycle {point.x}</b>: {point.y:.2f}",
         "ymin": 0,
@@ -39,7 +41,11 @@ def parse_reports(self):
 
     lg = {}
     for s_name in all_data:
-        lg[s_name] = dict((cycle, data["MEAN_QUALITY"]) for cycle, data in all_data[s_name].items())
+        ss_name = "???"
+        if len(s_name.split(' | ')) >0:
+            ss_name = s_name.split(" | ")[-1]
+
+        lg[ss_name] = dict((cycle, data["MEAN_QUALITY"]) for cycle, data in all_data[s_name].items())
 
     self.add_section(
         name="Mean Base Quality by Cycle",
