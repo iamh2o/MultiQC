@@ -1,137 +1,169 @@
-# ![MultiQC](https://raw.githubusercontent.com/ewels/MultiQC/master/docs/images/MultiQC_logo.png)
+---
+Using MultiQC:
+  Installation: installation.md
+  Running MultiQC: usage.md
+  Using Reports: reports.md
+  Configuration: config.md
+  Customising Reports: customisation.md
+  Using MultiQC in pipelines: pipelines.md
+  Downstream analysis: downstream.md
+  Common Problems: troubleshooting.md
+MultiQC Modules:
+  Pre-alignment:
+    Adapter Removal: modules/adapterRemoval.md
+    AfterQC: modules/afterqc.md
+    Bcl2fastq: modules/bcl2fastq.md
+    BioBloom Tools: modules/biobloomtools.md
+    Cluster Flow: modules/clusterflow.md
+    Cutadapt: modules/cutadapt.md
+    ClipAndMerge: modules/clipandmerge.md
+    FastQ Screen: modules/fastq_screen.md
+    FastQC: modules/fastqc.md
+    Fastp: modules/fastp.md
+    FLASh: modules/flash.md
+    Flexbar: modules/flexbar.md
+    InterOp: modules/interop.md
+    iVar: modules/ivar.md
+    Jellyfish: modules/jellyfish.md
+    KAT: modules/kat.md
+    leeHom: modules/leehom.md
+    minionqc: modules/minionqc.md
+    pycoQC: modules/pycoqc.md
+    Pychopper: modules/pychopper.md
+    SeqyClean: modules/seqyclean.md
+    Sickle: modules/sickle.md
+    Skewer: modules/skewer.md
+    SortMeRNA: modules/sortmerna.md
+    Trimmomatic: modules/trimmomatic.md
+  Aligners:
+    Biscuit: modules/biscuit.md
+    Bismark: modules/bismark.md
+    Bowtie 1: modules/bowtie1.md
+    Bowtie 2: modules/bowtie2.md
+    BBMap: modules/bbmap.md
+    HiCUP: modules/hicup.md
+    HiCPro: modules/hicpro.md
+    HISAT2: modules/hisat2.md
+    Kallisto: modules/kallisto.md
+    Long Ranger: modules/longranger.md
+    Salmon: modules/salmon.md
+    STAR: modules/star.md
+    TopHat: modules/tophat.md
+    DRAGEN: modules/dragen.md
+    MALT: modules/malt.md
+  Post-alignment:
+    Bamtools: modules/bamtools.md
+    Bcftools: modules/bcftools.md
+    biobambam2: modules/biobambam2.md
+    BUSCO: modules/busco.md
+    Bustools: modules/bustools.md
+    Conpair: modules/conpair.md
+    DamageProfiler: modules/damageprofiler.md
+    DeDup: modules/dedup.md
+    deepTools: modules/deeptools.md
+    Disambiguate: modules/disambiguate.md
+    featureCounts: modules/featureCounts.md
+    fgbio: modules/fgbio.md
+    GATK: modules/gatk.md
+    goleft_indexcov: modules/goleft_indexcov.md
+    Hap.py: modules/happy.md
+    HiCExplorer: modules/hicexplorer.md
+    HOPS: modules/hops.md
+    HOMER: modules/homer.md
+    HTSeq: modules/htseq.md
+    JCVI: modules/jcvi.md
+    Kaiju: modules/kaiju.md
+    Kraken: modules/kraken.md
+    MACS2: modules/macs2.md
+    Methyl QA: modules/methylQA.md
+    mosdepth: modules/mosdepth.md
+    miRTrace: modules/mirtrace.md
+    mirtop: modules/mirtop.md
+    MTNucRatio: modules/mtnucratio.md
+    MultiVCFAnalyzer: modules/multivcfanalyzer.md
+    ngsderive: modules/ngsderive.md
+    OptiType: modules/optitype.md
+    phantompeakqualtools: modules/phantompeakqualtools.md
+    Peddy: modules/peddy.md
+    Picard: modules/picard.md
+    Preseq: modules/preseq.md
+    Prokka: modules/prokka.md
+    PURPLE: modules/purple.md
+    qc3C: modules/qc3C.md
+    QoRTs: modules/qorts.md
+    Qualimap: modules/qualimap.md
+    Quast: modules/quast.md
+    RNA-SeQC: modules/rna_seqc.md
+    Rockhopper: modules/rockhopper.md
+    RSEM: modules/rsem.md
+    RSeQC: modules/rseqc.md
+    Samblaster: modules/samblaster.md
+    Samtools: modules/samtools.md
+    Sentieon: modules/sentieon.md
+    Sargasso: modules/sargasso.md
+    SexDetErrmine: modules/sexdeterrmine.md
+    EigenStratDatabseTools: modules/eigenstratdatabasetools.md
+    Slamdunk: modules/slamdunk.md
+    SnpEff: modules/snpeff.md
+    SNPsplit: modules/snpsplit.md
+    Somalier: modules/somalier.md
+    Supernova: modules/supernova.md
+    Stacks: modules/stacks.md
+    THeTA2: modules/theta2.md
+    VarScan2: modules/varscan2.md
+    VCFTools: modules/vcftools.md
+    VEP: modules/vep.md
+    verifyBAMID: modules/verifybamid.md
+Custom Content:
+  Introduction: custom_content.md
+Coding with MultiQC:
+  Writing new modules: modules.md
+  Plotting Functions: plots.md
+  MultiQC Plugins: plugins.md
+  Writing new templates: templates.md
+  Updating for compatibility: compatibility.md
+---
 
+# MultiQC Documentation
 
-### Aggregate bioinformatics results across many samples into a single report.
+MultiQC is a tool to aggregate bioinformatics results across many samples
+into a single report. It's written in Python and contains modules for a number
+of common tools.
 
-##### Find [documentation](http://multiqc.info/docs) and [example reports](http://multiqc.info/examples/rna-seq/multiqc_report.html) at [http://multiqc.info](http://multiqc.info)
+The documentation has the following pages:
 
-[![PyPI Version](https://img.shields.io/pypi/v/multiqc.svg?style=flat-square)](https://pypi.python.org/pypi/multiqc/)
-[![Conda Version](https://anaconda.org/bioconda/multiqc/badges/version.svg)](https://anaconda.org/bioconda/multiqc)
-[![Docker](https://img.shields.io/docker/automated/ewels/multiqc.svg?style=flat-square)](https://hub.docker.com/r/ewels/multiqc/)
-[![GitHub Workflow Status - Linux](https://img.shields.io/github/workflow/status/ewels/MultiQC/MultiQC%20-%20Linux?label=build%20-%20Linux&logo=ubuntu&logoColor=white&style=flat-square)](https://github.com/ewels/MultiQC/actions?query=workflow%3A%22MultiQC+-+Linux%22)
-[![GitHub Workflow Status - Windows](https://img.shields.io/github/workflow/status/ewels/MultiQC/MultiQC%20-%20Windows?label=build%20-%20Windows&logo=windows&style=flat-square)](https://github.com/ewels/MultiQC/actions?query=workflow%3A%22MultiQC+-+Windows%22)
+- [Docs homepage](README.md) _(this README file)_
+- Using MultiQC
+  - [Installing MultiQC](installation.md)
+  - [Running MultiQC](usage.md)
+  - [Using Reports](reports.md)
+  - [Configuration](config.md)
+  - [Customising Reports](customisation.md)
+  - [Using MultiQC in pipelines](pipelines.md)
+  - [Downstream analysis of MultiQC outputs](downstream.md)
+  - [Common Problems](troubleshooting.md)
+- [MultiQC Modules](modules/)
+- [Custom Content](custom_content.md)
+- Coding with MultiQC
+  - [Writing new modules](modules.md)
+  - [Plotting functions](plots.md)
+  - [MultiQC Plugins](plugins.md)
+  - [Writing new templates](templates.md)
+  - [Updating for compatibility](compatibility.md)
 
-[![Gitter](https://img.shields.io/badge/gitter-%20join%20chat%20%E2%86%92-4fb99a.svg?style=flat-square)](https://gitter.im/ewels/MultiQC)
-[![DOI](https://img.shields.io/badge/DOI-10.1093%2Fbioinformatics%2Fbtw354-lightgrey.svg?style=flat-square)](http://dx.doi.org/10.1093/bioinformatics/btw354)
+These docs can be read in any of three ways:
 
------
+- On the MultiQC Website: <http://multiqc.info>
+- On GitHub: <https://github.com/ewels/MultiQC/>
+- As part of the distributed source code (in `/docs/`)
 
-MultiQC is a tool to create a single report with interactive plots
-for multiple bioinformatics analyses across many samples.
+If you're curious how the website works, check out the
+[MultiQC website repository](https://github.com/ewels/MultiQC_website).
 
-MultiQC is written in Python (tested with v3.6+). It is
-available on the [Python Package Index](https://pypi.python.org/pypi/multiqc/)
-and through conda using [Bioconda](http://bioconda.github.io/).
+## Contributing to MultiQC
 
-Reports are generated by scanning given directories for recognised log files.
-These are parsed and a single HTML report is generated summarising the statistics
-for all logs found. MultiQC reports can describe multiple analysis steps and
-large numbers of samples within a single plot, and multiple analysis tools making
-it ideal for routine fast quality control.
+If you write a module which could be of use to others, it would be great to
+merge those changes back into the core MultiQC project.
 
-There a very large number of Bioinformatics tools supported by MultiQC.
-Please see the MultiQC website for a [complete list](https://multiqc.info/#supported-tools).
-
-MultiQC can also easily parse data from custom scripts, if correctly formatted / configured.
-See the [MultiQC documentation](http://multiqc.info/docs/#custom-content) for more information.
-
-Please note that some modules only recognise output from certain tool subcommands.
-Please see the [module documentation](http://multiqc.info/docs/#multiqc-modules) for more information.
-
-More modules are being written all of the time. Please suggest any ideas as a new
-[issue](https://github.com/ewels/MultiQC/issues) _(include an example log file if possible)_.
-
-## Installation
-
-You can install MultiQC from [PyPI](https://pypi.python.org/pypi/multiqc/)
-using `pip` as follows:
-```bash
-pip install multiqc
-```
-
-Alternatively, you can install using [Conda](http://anaconda.org/)
-from the [bioconda channel](https://bioconda.github.io/):
-```bash
-conda install -c bioconda multiqc
-```
-
-If you would like the development version instead, the command is:
-```bash
-pip install --upgrade --force-reinstall git+https://github.com/ewels/MultiQC.git
-```
-
-MultiQC is also available in the
-[Galaxy Toolshed](https://toolshed.g2.bx.psu.edu/view/engineson/multiqc/).
-
-## Usage
-Once installed, you can use MultiQC by navigating to your analysis directory
-(or a parent directory) and running the tool:
-```bash
-multiqc .
-```
-
-That's it! MultiQC will scan the specified directory (`.` is the current dir)
-and produce a report detailing whatever it finds.
-
-The report is created in `multiqc_report.html` by default. Tab-delimited data
-files are also created in `multiqc_data/`, containing extra information.
-These can be easily inspected using Excel (use `--data-format` to get `yaml`
-or `json` instead).
-
-For more detailed instructions, run `multiqc -h` or see the
-[documentation](http://multiqc.info/docs/#running-multiqc).
-
-## Development
-
-MultiQC has been written in a way to make extension and customisation as easy as possible.
-The documentation has a large section describing how to [code with MultiQC](https://multiqc.info/docs/#coding-with-multiqc) and you can find an example plugin at [https://github.com/MultiQC/example-plugin](https://github.com/MultiQC/example-plugin).
-
-Pull-requests for fixes and additions are very welcome.
-Please see the [contributing notes](https://github.com/ewels/MultiQC/blob/master/.github/CONTRIBUTING.md) for more information about how the process works.
-
-## Citation
-Please consider citing MultiQC if you use it in your analysis.
-
-> **MultiQC: Summarize analysis results for multiple tools and samples in a single report** <br/>
-> _Philip Ewels, Måns Magnusson, Sverker Lundin and Max Käller_ <br/>
-> Bioinformatics (2016) <br/>
-> doi: [10.1093/bioinformatics/btw354](http://dx.doi.org/10.1093/bioinformatics/btw354) <br/>
-> PMID: [27312411](http://www.ncbi.nlm.nih.gov/pubmed/27312411)
-
-```BibTeX
-@article{doi:10.1093/bioinformatics/btw354,
- author = {Ewels, Philip and Magnusson, Måns and Lundin, Sverker and Käller, Max},
- title = {MultiQC: summarize analysis results for multiple tools and samples in a single report},
- journal = {Bioinformatics},
- volume = {32},
- number = {19},
- pages = {3047},
- year = {2016},
- doi = {10.1093/bioinformatics/btw354},
- URL = { + http://dx.doi.org/10.1093/bioinformatics/btw354},
- eprint = {/oup/backfile/Content_public/Journal/bioinformatics/32/19/10.1093_bioinformatics_btw354/3/btw354.pdf}
-}
-```
-
-## Contributions & Support
-
-Contributions and suggestions for new features are welcome, as are bug reports!
-Please create a new [issue](https://github.com/ewels/MultiQC/issues) for any
-of these, including example reports where possible. MultiQC has extensive
-[documentation](http://multiqc.info/docs) describing how to write new modules,
-plugins and templates.
-
-There is a chat room for the package hosted on Gitter where you can discuss
-things with the package author and other developers:
-https://gitter.im/ewels/MultiQC
-
-If in doubt, feel free to get in touch with the author directly:
-[@ewels](https://github.com/ewels) (phil.ewels@scilifelab.se)
-
-### Contributors
-Project lead and main author: [@ewels](https://github.com/ewels)
-
-There are a lot of other code contributors though!
-See the [Contributors Graph](https://github.com/ewels/MultiQC/graphs/contributors) for details.
-
-MultiQC is released under the GPL v3 or later licence.
+For instructions on how best to do this, please see the
+[contributing instructions](https://github.com/ewels/MultiQC/blob/master/.github/CONTRIBUTING.md).
